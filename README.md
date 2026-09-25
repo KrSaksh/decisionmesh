@@ -11,7 +11,7 @@ Instead of sending every task to an expensive reasoning model, DecisionMesh eval
 
 ---
 
-## 💡 Core Idea
+## Idea
 
 ```text
                           Task
@@ -30,7 +30,7 @@ Instead of sending every task to an expensive reasoning model, DecisionMesh eval
 
 ---
 
-## 🎯 Project Goals
+## Goals
 
 * **Reduce Costs:** Minimize unnecessary calls to high-cost reasoning models.
 * **Maintain Performance:** Preserve high task-success rates across diverse agent workflows.
@@ -41,7 +41,7 @@ Instead of sending every task to an expensive reasoning model, DecisionMesh eval
 
 ---
 
-## 🚧 Current Status
+## Current Status
 
 **Early Development**
 
@@ -49,7 +49,7 @@ The project is currently in the initial design and prototyping phase. API signat
 
 ---
 
-## 🗺️ Planned Architecture
+## Architecture
 
 DecisionMesh will progressively incorporate the following components:
 
@@ -66,12 +66,12 @@ DecisionMesh will progressively incorporate the following components:
 
 ---
 
-## 🔬 Research Question
+## Research Question
 
 > **Can a low-latency decision layer reduce AI inference cost and latency while maintaining task success compared with using a single large model for every task?**
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
