@@ -55,7 +55,7 @@ DecisionMesh will progressively incorporate the following components:
 
 - Task classification
 - Decision routing engine
-- Model adapters
+- Model abstraction and adapters
 - Deterministic tools integration
 - Confidence-aware fallback
 - Policy enforcement layer
