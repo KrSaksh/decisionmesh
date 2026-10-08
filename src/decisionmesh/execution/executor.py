@@ -46,7 +46,7 @@ class Executor:
                 actual_cost=decision.estimated_cost,
             )
         
-        except (ValueError, ArithmeticError) as exc:
+        except Exception as exc: # noqa: BLE001
             latency_ms = (time.perf_counter() - start) * 1000
             
             return ExecutionResult(

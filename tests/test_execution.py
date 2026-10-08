@@ -2,10 +2,18 @@ import pytest
 
 from decisionmesh.execution import Executor
 from decisionmesh.models import Decision, Strategy, Task, TaskType
-from decisionmesh.models.llm import CheapModel, StrongModel
+from decisionmesh.models.llm import CheapModel, ModelRunner, StrongModel
 from decisionmesh.tools import Calculator
 
 
+class FailingModel(ModelRunner):
+    @property
+    def name(self) -> str:
+        return "failing-model"
+    
+    def generate(self, prompt: str) -> str:
+        raise RuntimeError("Model execution failed.")
+    
 @pytest.fixture
 def executor() -> Executor:
     return Executor(
@@ -130,3 +138,56 @@ def test_execute_unsupported_strategy(executor: Executor):
     assert result.latency_ms >= 0
     assert result.actual_cost == pytest.approx(0.0)
     assert "Unsupported execution strategy" in result.error
+
+def test_model_failure_returns_failed_execution_result():
+    executor = Executor(
+        cheap_model=FailingModel(),
+        strong_model=StrongModel(),
+        calculator=Calculator(),
+    )
+    
+    task = Task(
+        id="failure-test",
+        input="Hello",
+    )
+    
+    decision = Decision(
+        strategy=Strategy.CHEAP_MODEL,
+        model="failing-model",
+        confidence=0.85,
+        estimated_cost=0.001,
+        reason="Test failure.",
+    )
+    
+    result = executor.execute(task, decision)
+    
+    assert result.success is False
+    assert result.output is None
+    assert result.error == "Model execution failed."
+    assert result.latency_ms >= 0
+    
+def test_unsupported_strategy_returns_failed_execution_result():
+    executor = Executor(
+        cheap_model=CheapModel(),
+        strong_model=StrongModel(),
+        calculator=Calculator(),
+    )
+
+    task = Task(
+        id="unsupported-test",
+        input="Hello",
+    )
+
+    decision = Decision(
+        strategy=Strategy.ESCALATE,
+        model=None,
+        confidence=0.5,
+        estimated_cost=0.0,
+        reason="Unsupported execution strategy test.",
+    )
+
+    result = executor.execute(task, decision)
+
+    assert result.success is False
+    assert result.output is None
+    assert result.error is not None
