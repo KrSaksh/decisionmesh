@@ -45,3 +45,6 @@ dist/
 
 # Miscellaneous
 *.txt
+
+# Generated benchmark results
+benchmarks/results/
